@@ -1,1 +1,6 @@
 # chess-prediction
+
+The goal of this project is to understand how well we can predict the winner of a chess match based on features such as rating (ELO), the number of turns of the match, and the opening that was played. From there, the goal is to compare this to the Stockfish estimatation at various points in the match to understand how much predictive power the estimation has versus the other features of this model. A couple motivating questions for this exercise are how much of an early advantage does one need in order to have a good chance at deafeating a higher rated player, and at what point is it worth forfeiting the match due to a very low chance of winning.
+
+The dataset used here is taken from Kaggle: https://www.kaggle.com/datasets/datasnaek/chess
+It consists of a sample of 20,000 matches played on Lichess across the top teams at the time of the datapull in 2017. I plan on supplementing this data with additional matches played since by using the full Lichess database found here: https://database.lichess.org/
