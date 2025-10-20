@@ -12,38 +12,26 @@ import pickle
 
 
 df=pd.read_parquet('data/train-00000-of-00064.parquet')
-df_blitz=df[df['Event'].str.contains('tournament')]
 
-
-df_blitz['game_length']=df_blitz['TimeControl'].map(lambda x: int(x.split('+', 1)[0]))
-df_blitz['increment']=df_blitz['TimeControl'].map(lambda x: int(x.split('+', 1)[1]))
-df_blitz['winner']=df_blitz.apply(lambda row: 'white' if row['Result']=='1-0' else 'black' if row['Result']=='0-1' else 'draw', axis=1)
-df_blitz=df_blitz.loc[df_blitz['winner'] != 'draw']
-df_blitz.reset_index(drop=True, inplace=True)
-df_blitz['white_win']=df_blitz.apply(lambda row: 1 if row['winner']=='white' else 0,axis=1)
-df_blitz['rating_diff']=df_blitz.apply(lambda row: row['WhiteElo']-row['BlackElo'],axis=1)
+df=df[df['Event'].str.contains('tournament')]
+df['game_length']=df['TimeControl'].map(lambda x: int(x.split('+', 1)[0]))
+df['increment']=df['TimeControl'].map(lambda x: int(x.split('+', 1)[1]))
+df=df.loc[(df['Result'] == '1-0') | (df['Result'] == '0-1')]
+df.reset_index(drop=True, inplace=True)
+df['winner']=df.apply(lambda row: 1 if row['Result']=='1-0' else 0, axis=1)
+df['rating_diff']=df.apply(lambda row: row['WhiteElo']-row['BlackElo'], axis=1)
 
 # remove all text after : or | characters (typically used to indicate variations)
-def group_openings_1(string):
-    if ':' in string:
-        return string.split(':', 1)[0].strip()
-    elif '|' in string:
-        return string.split('|', 1)[0].strip()
-    else:
-        return string
-
-# use regex to return only the string up to and including the following strings
-def group_openings_2(string):
-    pattern = r'^(.*?(?:Defense|Attack|Game|Opening|Gambit|Countergambit)\b)'
-    match = re.match(pattern, string)
+def group_openings(string):
+    string = string.split(':', 1)[0].split('|', 1)[0].strip()
+    match = re.match(r'^(.*?(?:Defense|Attack|Game|Opening|Gambit|Countergambit)\b)', string)
     if match:
         return match.group(1)
     else:
         return string
     
 
-df_blitz['opening_group'] = df_blitz['Opening'].map(group_openings_1).map(group_openings_2)
-df_blitz['opening_group'] = df_blitz['opening_group'].str.replace("'", "")
+df['opening_group'] = df['Opening'].map(group_openings).str.replace("'", "")
 
 
 
@@ -70,8 +58,8 @@ pipeline = Pipeline(steps=[
 
 
 X_train, X_test, y_train, y_test = train_test_split(
-    df_blitz[numeric_features + categorical_features], 
-    df_blitz["white_win"], 
+    df[numeric_features + categorical_features], 
+    df["winner"], 
     test_size=0.15, 
     random_state=42
 )
