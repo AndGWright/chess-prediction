@@ -6,7 +6,7 @@ import pandas as pd
 import re
 from contextlib import asynccontextmanager
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 MODEL_PATH = ROOT / "models" / "model.pkl"
 
 _model = None
@@ -32,7 +32,7 @@ class MatchInput(BaseModel):
     WhiteElo: int = Field(..., description="White player's Elo rating")
     BlackElo: int = Field(..., description="Black player's Elo rating")
     TimeControl: str = Field(..., description="Time control string like '5+0' or '3+2'")
-    Opening: str = Field(..., description="Opening name / ECO string")
+    Opening: str = Field(..., description="Opening name")
 
 class PredictionOut(BaseModel):
     white_win_probability: float
