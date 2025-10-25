@@ -1,0 +1,36 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+
+# Logs and temp
+*.log
+logs/
+tmp/
+
+# Environment files
+.env
+.env.*
+
+# Data and models
+data/
+datasets/
+*.pkl
+*.joblib
+*.h5
+
+# Docker
+__pycache__/
+docker-cache/
