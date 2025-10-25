@@ -6,8 +6,7 @@ import pandas as pd
 import re
 from contextlib import asynccontextmanager
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-MODEL_PATH = ROOT / "models" / "model.pkl"
+MODEL_PATH = Path("models") / "model.pkl"
 
 _model = None
 
